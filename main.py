@@ -1,5 +1,7 @@
 import datetime;
 import time
+import plotly.express as px 
+import pandas as pd
 
 print("Memento Mori Clock")
 
@@ -52,3 +54,19 @@ work_time = work_day * (retirement_age - passed_time) / day
 
 free_time = left_time - sleep_time - work_time - other_time
 print("Free time left: %.2f" % (free_time/year) + " years or %.2f hours per day" % (free_time/hour / (left_time/year * 365.25)) )
+
+# Sample data (replace these lists with your own data)
+categories = ["Past", "Future", "Future", "Future", "Future"]
+subcategories = ["", "Sleep", "Work", "Other", "Free Time"]
+values = [passed_time/hour, sleep_time/hour, work_time/hour, other_time/hour, free_time/hour]
+
+# Create a DataFrame from the lists
+data = {'categories': categories, 'subcategories': subcategories, 'values': values}
+df = pd.DataFrame(data)
+
+# Create a treemap chart using Plotly Express
+fig = px.treemap(df, path=['categories', 'subcategories'], values='values', title='Treemap Chart')
+
+# Show the plot
+fig.show()
+input("Press any key to exit..")
