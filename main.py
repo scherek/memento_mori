@@ -13,7 +13,7 @@ month = day * 365.25 / 12
 year = month * 12
 
 current_time = datetime.datetime.now().timestamp()
-birth_date = input("Format: dd/mm/yyyy\nEnter birthdate: ") 
+birth_date = input("\nEnter birthdate (format: dd/mm/yyyy): ") 
 birth_date = time.mktime(datetime.datetime.strptime(birth_date,"%d/%m/%Y").timetuple())
 
 sleep = 8 * hour
@@ -35,7 +35,10 @@ other_time = {}
 other_i = input('\nFormat: Sleep, 8*60*60\nEnter name of another activity, and time it takes per day after a comma (q to quit): ')
 while other_i != 'q':
     comma = other_i.find(',')
-    other_time[f"{other_i[0:comma]}"] = eval(other_i[comma+1::])
+    if other_i[0:comma+1] == ' ':
+        other_time[f"{other_i[0:comma]}"] = eval(other_i[comma+2::])
+    else:
+        other_time[f"{other_i[0:comma]}"] = eval(other_i[comma+1::])
     other_i = input('\nFormat: Sleep, 8*60*60\nEnter name of another activity, and time it takes per day after a comma (q to quit): ')
 
 print(other_time)
@@ -55,18 +58,13 @@ work_time = work_day * (retirement_age - passed_time) / day
 free_time = left_time - sleep_time - work_time - other_time
 print("Free time left: %.2f" % (free_time/year) + " years or %.2f hours per day" % (free_time/hour / (left_time/year * 365.25)) )
 
-# Sample data (replace these lists with your own data)
 categories = ["Past", "Future", "Future", "Future", "Future"]
 subcategories = ["", "Sleep", "Work", "Other", "Free Time"]
 values = [passed_time/hour, sleep_time/hour, work_time/hour, other_time/hour, free_time/hour]
 
-# Create a DataFrame from the lists
 data = {'categories': categories, 'subcategories': subcategories, 'values': values}
 df = pd.DataFrame(data)
 
-# Create a treemap chart using Plotly Express
 fig = px.treemap(df, path=['categories', 'subcategories'], values='values', title='Treemap Chart')
-
-# Show the plot
 fig.show()
 input("Press any key to exit..")
